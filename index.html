@@ -27,6 +27,18 @@
     </div>
 </body>
 <script>
+    struct_vars = [
+      { name :"counter", len:4},
+      { name :"motion state", len:4},
+      { name :"motion error counter", len:4},
+      { name :"comm state", len:4},
+      { name :"ctrl state", len:4},
+      { name :"ctrl quote", len:4},
+      { name :"ctrl valid quote", len:4},
+      { name :"reader state", len:4},
+      { name :"reader quote", len:4}
+    ];
+    num_struct_vars = struct_vars.length;
     function decodifica() {
         console.log("Inizio decodifica");
         var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
@@ -35,15 +47,18 @@
         info_box = "";
         var_cnt = 0;
         //var lun = 40;
-        for (let i = 0; i+7 <= lun; i=i+8) {
-          substr = pacchetto.substring(i,i+8);
+        for (let i = 0; i+struct_vars[var_cnt].len-1 <= lun && var_cnt < num_struct_vars;) {
+          substr = pacchetto.substring(i,i+struct_vars[var_cnt].len);
           console.log(substr);
           var num = parseInt('0x'+substr.match(/../g).reverse().join(''));
           console.log(num)
-          info_box = "Var "+var_cnt+": "+num+"\n";
+          console.log("var_cnt: "+ var_cnt);
+          info_box += struct_vars[var_cnt].name+": "+num+"\n";
+          i = i + struct_vars[var_cnt].len;
           var_cnt++;
         }
         document.getElementById("info").innerText = (info_box);
+
     }
 </script>
 </html>
