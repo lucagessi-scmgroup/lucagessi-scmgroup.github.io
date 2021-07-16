@@ -28,17 +28,16 @@
 </body>
 <script>
     struct_vars = [
-      { name :"counter", len:4},
-      { name :"motion state", len:4},
-      { name :"motion error counter", len:4},
-      { name :"comm state", len:4},
-      { name :"ctrl state", len:4},
-      { name :"ctrl quote", len:4},
-      { name :"ctrl valid quote", len:4},
-      { name :"reader state", len:4},
-      { name :"reader quote", len:4}
+      { name :"counter", len:8},
+      { name :"motion state", len:8},
+      { name :"motion error counter", len:8},
+      { name :"comm state", len:8},
+      { name :"ctrl state", len:8},
+      { name :"ctrl quote", len:8},
+      { name :"ctrl valid quote", len:8},
+      { name :"reader state", len:8},
+      { name :"reader quote", len:8}
     ];
-    num_struct_vars = struct_vars.length;
     function decodifica() {
         console.log("Inizio decodifica");
         var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
@@ -47,13 +46,14 @@
         info_box = "";
         var_cnt = 0;
         //var lun = 40;
-        for (let i = 0; i+struct_vars[var_cnt].len-1 <= lun && var_cnt < num_struct_vars;) {
+        for (let i = 0; (var_cnt < struct_vars.length) && (i+struct_vars[var_cnt].len-1 <= lun);) {
           substr = pacchetto.substring(i,i+struct_vars[var_cnt].len);
           console.log(substr);
-          var num = parseInt('0x'+substr.match(/../g).reverse().join(''));
+          var hex_str = '0x'+substr.match(/../g).reverse().join('');
+          var num = parseInt(hex_str);
           console.log(num)
           console.log("var_cnt: "+ var_cnt);
-          info_box += struct_vars[var_cnt].name+": "+num+"\n";
+          info_box += struct_vars[var_cnt].name+": "+num+". 0x"+substr+"\n";
           i = i + struct_vars[var_cnt].len;
           var_cnt++;
         }
