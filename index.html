@@ -14,54 +14,128 @@
 <body>
   <script src="js/scripts.js"></script>
   <div>
-  <h1>Luca Gessi SCM - Github Page</h1>
+    <h1>Flexdrive decoder - Github Page</h1>
+  </div>
+    <div>
+      <h1>Pacchetto diagnostica</h1>
+      <textarea id="pacchetto_diagnostica" name="pacchetto" rows="4" cols="50">
+      </textarea>
+      <div><button type="button" id="inizia" onclick="decodifica_diagnostica()">Decodifica</button></div>
+      <div id="info_diagnostica">
+
+      </div>
     </div>
     <div>
-    <h1>Decodificatore pacchetto diagnostica</h1>
-    <textarea id="pacchetto_diagnostica" name="pacchetto" rows="4" cols="50">
-    </textarea>
-    <div><button type="button" id="inizia" onclick="decodifica()">Decodifica</button></div>
-    </div>
-    <div id="info">
+      <h1>Advertising device</h1>
+      <textarea id="pacchetto_adv_dev" name="adv_dev" rows="4" cols="50">
+      </textarea>
+      <div><button type="button" id="inizia" onclick="decodifica_adv_dev()">Decodifica</button></div>
+      <div id="info_adv_dev">
 
+      </div>
+    </div>
+    <div>
+      <h1>Generazione comando scrittura tipo (terza caratteristica)</h1>
+      <input type="number" id="id_dev" name="id_dev"
+       min="1" max="60000">
+      <div><button type="button" id="inizia" onclick="genera_cmd_id()">Genera</button></div>
+      <div id="info_write_id">
+
+      </div>
     </div>
 </body>
 <script>
-    struct_vars = [
-      { name :"counter", len:8},
-      { name :"motion state", len:8},
-      { name :"motion waiting state", len:8},
-      { name :"motion error counter", len:8},
-      { name :"ctrl state", len:8},
-      { name :"ctrl quote", len:8},
-      { name :"ctrl valid quote", len:8},
-      { name :"reader state", len:8},
-      { name :"reader quote", len:8},
-      { name :"comm state", len:8},
-      { name :"num of cb", len:8},
-      { name :"spi locked", len:8}
-    ];
-    function decodifica() {
-        console.log("Inizio decodifica");
-        var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
-        console.log(pacchetto);
-        var lun = pacchetto.length;
-        info_box = "";
-        var_cnt = 0;
-        //var lun = 40;
-        for (let i = 0; (var_cnt < struct_vars.length) && (i+struct_vars[var_cnt].len-1 <= lun);) {
-          substr = pacchetto.substring(i,i+struct_vars[var_cnt].len);
-          console.log(substr);
-          var hex_str = '0x'+substr.match(/../g).reverse().join('');
-          var num = parseInt(hex_str);
-          console.log(num)
-          console.log("var_cnt: "+ var_cnt);
-          info_box += struct_vars[var_cnt].name+": "+num+". 0x"+substr+"\n";
-          i = i + struct_vars[var_cnt].len;
-          var_cnt++;
-        }
-        document.getElementById("info").innerText = (info_box);
-
+  function genera_cmd_id(){
+    console.log("Inizio generazione comando scrittura id");
+    var dev_id = document.getElementById("id_dev").value;
+    console.log("Dev id: "+dev_id);
+    var hex_cmd = "0600010100";
+    var hex_val = parseInt(dev_id).toString(16);
+    if (hex_val.length < 4){
+      to_add = 4-hex_val.length;
+      for(let i=0;i<to_add;i++){
+        hex_val = "0"+hex_val;
+      }
     }
+    console.log("Hex id original: "+hex_val);
+    hex_val = hex_val.charAt(2)+hex_val.charAt(3)+hex_val.charAt(0)+hex_val.charAt(1);
+    console.log("Hex id: "+hex_val);
+    hex_cmd = hex_cmd+hex_val+"00";
+    //0600010100020000 = write tipo 2
+    document.getElementById("info_write_id").innerText = (hex_cmd);
+  }
+  function variabile_standard(_obj, _substr){
+    var hex_str = '0x'+_substr.match(/../g).reverse().join('');
+    var num = parseInt(hex_str);
+    console.log(num)
+    console.log("var_cnt: "+ var_cnt);
+    return _obj.name+": "+num+". 0x"+_substr+"\n"; 
+  }
+  diagn_pkt = [
+    { name :"counter", len:8, handle:variabile_standard},
+    { name :"motion state", len:8, handle:variabile_standard},
+    { name :"motion waiting state", len:8, handle:variabile_standard},
+    { name :"motion error counter", len:8, handle:variabile_standard},
+    { name :"ctrl state", len:8, handle:variabile_standard},
+    { name :"ctrl quote", len:8, handle:variabile_standard},
+    { name :"ctrl valid quote", len:8, handle:variabile_standard},
+    { name :"reader state", len:8, handle:variabile_standard},
+    { name :"reader quote", len:8, handle:variabile_standard},
+    { name :"comm state", len:8, handle:variabile_standard},
+    { name :"num of cb", len:8, handle:variabile_standard},
+    { name :"spi locked", len:8, handle:variabile_standard}
+  ];
+  function decodifica_diagnostica() {
+      console.log("Inizio decodifica");
+      var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
+      console.log(pacchetto);
+      var lun = pacchetto.length;
+      info_box = "";
+      var_cnt = 0;
+      //var lun = 40;
+      for (let i = 0; (var_cnt < diagn_pkt.length) && (i+diagn_pkt[var_cnt].len-1 <= lun);) {
+        substr = pacchetto.substring(i,i+diagn_pkt[var_cnt].len);
+        console.log(substr);
+        info_box += diagn_pkt[var_cnt].handle(diagn_pkt[var_cnt], substr);
+        i = i + diagn_pkt[var_cnt].len;
+        var_cnt++;
+      }
+      document.getElementById("info_diagnostica").innerText = (info_box);
+
+  }
+
+  adv_dev_pkt = [
+    { name :"counter", len:8, handle:variabile_standard},
+    { name :"motion state", len:8, handle:variabile_standard},
+    { name :"motion waiting state", len:8, handle:variabile_standard},
+    { name :"motion error counter", len:8, handle:variabile_standard},
+    { name :"ctrl state", len:8, handle:variabile_standard},
+    { name :"ctrl quote", len:8, handle:variabile_standard},
+    { name :"ctrl valid quote", len:8, handle:variabile_standard},
+    { name :"reader state", len:8, handle:variabile_standard},
+    { name :"reader quote", len:8, handle:variabile_standard},
+    { name :"comm state", len:8, handle:variabile_standard},
+    { name :"num of cb", len:8, handle:variabile_standard},
+    { name :"spi locked", len:8, handle:variabile_standard}
+  ];
+
+  function decodifica_adv_dev() {
+      console.log("Inizio decodifica adv dev");
+      var pacchetto = document.getElementById("pacchetto_adv_dev").value.replace(/\s/g, '');
+      console.log(pacchetto);
+      var lun = pacchetto.length;
+      info_box = "";
+      var_cnt = 0;
+      //var lun = 40;
+      for (let i = 0; (var_cnt < adv_dev_pkt.length) && (i+adv_dev_pkt[var_cnt].len-1 <= lun);) {
+        substr = pacchetto.substring(i,i+adv_dev_pkt[var_cnt].len);
+        console.log(substr);
+        info_box += adv_dev_pkt[var_cnt].handle(adv_dev_pkt[var_cnt], substr);
+        i = i + adv_dev_pkt[var_cnt].len;
+        var_cnt++;
+      }
+      document.getElementById("info_adv_dev").innerText = (info_box);
+
+  }
 </script>
 </html>
