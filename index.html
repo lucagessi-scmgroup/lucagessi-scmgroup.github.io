@@ -19,7 +19,6 @@
     <div>
     <h1>Decodificatore pacchetto diagnostica</h1>
     <textarea id="pacchetto_diagnostica" name="pacchetto" rows="4" cols="50">
-    Inserisci qui il dato in HEX
     </textarea>
     <div><button type="button" id="inizia" onclick="decodifica()">Decodifica</button></div>
     </div>
@@ -32,6 +31,19 @@
         console.log("Inizio decodifica");
         var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
         console.log(pacchetto);
+        var lun = pacchetto.length;
+        info_box = "";
+        var_cnt = 0;
+        //var lun = 40;
+        for (let i = 0; i+7 <= lun; i=i+8) {
+          substr = pacchetto.substring(i,i+8);
+          console.log(substr);
+          var num = parseInt('0x'+substr.match(/../g).reverse().join(''));
+          console.log(num)
+          info_box = "Var "+var_cnt+": "+num+"\n";
+          var_cnt++;
+        }
+        document.getElementById("info").innerText = (info_box);
     }
 </script>
 </html>
