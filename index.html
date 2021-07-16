@@ -13,6 +13,25 @@
 </head>
 <body>
   <script src="js/scripts.js"></script>
+  <div>
   <h1>Luca Gessi SCM - Github Page</h1>
+    </div>
+    <div>
+    <h1>Decodificatore pacchetto diagnostica</h1>
+    <textarea id="pacchetto_diagnostica" name="pacchetto" rows="4" cols="50">
+    Inserisci qui il dato in HEX
+    </textarea>
+    <div><button type="button" id="inizia" onclick="decodifica()">Decodifica</button></div>
+    </div>
+    <div id="info">
+
+    </div>
 </body>
+<script>
+    function decodifica() {
+        console.log("Inizio decodifica");
+        var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
+        console.log(pacchetto);
+    }
+</script>
 </html>
