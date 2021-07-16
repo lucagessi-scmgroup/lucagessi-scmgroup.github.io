@@ -30,13 +30,16 @@
     struct_vars = [
       { name :"counter", len:8},
       { name :"motion state", len:8},
+      { name :"motion waiting state", len:8},
       { name :"motion error counter", len:8},
-      { name :"comm state", len:8},
       { name :"ctrl state", len:8},
       { name :"ctrl quote", len:8},
       { name :"ctrl valid quote", len:8},
       { name :"reader state", len:8},
       { name :"reader quote", len:8}
+      { name :"comm state", len:8},
+      { name :"num of cb", len:8},
+      { name :"spi locked", len:8}
     ];
     function decodifica() {
         console.log("Inizio decodifica");
