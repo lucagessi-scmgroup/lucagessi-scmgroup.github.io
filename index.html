@@ -89,7 +89,8 @@
   function decodifica_diagnostica() {
     console.log("Inizio decodifica");
     var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
-    console.log(pacchetto);
+    pacchetto = pacchetto.replaceAll('-','');
+    console.log("Pacchetto pulito:"+pacchetto);
     var lun = pacchetto.length;
     info_box = "";
     var_cnt = 0;
