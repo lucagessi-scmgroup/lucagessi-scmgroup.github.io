@@ -72,15 +72,32 @@
     console.log("var_cnt: "+ var_cnt);
     return _obj.name+": "+num+". 0x"+_substr+"\n"; 
   }
+
+  function variabile_stato_device(_obj, _substr){
+    var hex_str = '0x'+_substr.match(/../g).reverse().join('');
+    var num = parseInt(hex_str);
+    console.log(num)
+    console.log("var_cnt: "+ var_cnt);
+    var ret_str = _obj.name+": "+num+". 0x"+_substr+"\n";
+    ret_str += "____position OK: "+(num & 1)+"\n";
+    ret_str += "____on going program: "+((num>>1) & 1)+"\n";
+    ret_str += "____on going production: "+((num>>2) & 1)+"\n";
+    ret_str += "____barcode detected: "+((num>>3) & 1)+"\n";
+    ret_str += "____dirty barcode: "+((num>>4) & 1)+"\n";
+    ret_str += "____empty battery: "+((num>>5) & 1)+"\n";
+    ret_str += "____to remove: "+((num>>6) & 1)+"\n";
+    return ret_str; 
+  }
+
   diagn_pkt = [
     { name :"counter", len:8, handle:variabile_standard},
     { name :"motion state", len:8, handle:variabile_standard},
     { name :"motion waiting state", len:8, handle:variabile_standard},
     { name :"motion error counter", len:8, handle:variabile_standard},
-    { name :"ctrl state", len:8, handle:variabile_standard},
+    { name :"ctrl state", len:8, handle:variabile_stato_device},
     { name :"ctrl quote", len:8, handle:variabile_standard},
     { name :"ctrl valid quote", len:8, handle:variabile_standard},
-    { name :"reader state", len:8, handle:variabile_standard},
+    { name :"reader state", len:8, handle:variabile_stato_device},
     { name :"reader quote", len:8, handle:variabile_standard},
     { name :"comm state", len:8, handle:variabile_standard},
     { name :"num of cb", len:8, handle:variabile_standard},
