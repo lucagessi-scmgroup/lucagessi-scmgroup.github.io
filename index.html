@@ -7,21 +7,21 @@
   <meta name="description" content="Starter Template">
   <meta name="author" content="Gregry Pike">
   <link rel="stylesheet" href="css/styles.css?v=1.0">
-  <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
   <script src="js/scripts.js"></script>
-  <div>
+  <div class="container">
     <h1>Flexdrive</h1>
     <h2>Decodificatore e codificatore pacchetti</h2>
   </div>
-    <div>
+    <div class="container">
       <h1>Pacchetto diagnostica</h1>
       <textarea id="pacchetto_diagnostica" name="pacchetto" rows="4" cols="50">
       </textarea>
-      <div><button type="button" id="inizia" onclick="decodifica_diagnostica()">Decodifica</button></div>
+      <div><button type="button" class="btn btn-primary" onclick="decodifica_diagnostica()">Decodifica</button></div>
       <div id="info_diagnostica">
 
       </div>
@@ -30,16 +30,16 @@
       <h1>Advertising device</h1>
       <textarea id="pacchetto_adv_dev" name="adv_dev" rows="4" cols="50">
       </textarea>
-      <div><button type="button" id="inizia" onclick="decodifica_adv_dev()">Decodifica</button></div>
+      <div><button type="button"  class="btn btn-primary" onclick="decodifica_adv_dev()">Decodifica</button></div>
       <div id="info_adv_dev">
 
       </div>
     </div>
-    <div>
+    <div class="container">
       <h1>Generazione comando scrittura tipo (terza caratteristica)</h1>
       <input type="number" id="id_dev" name="id_dev"
        min="1" max="60000">
-      <div><button type="button" id="inizia" onclick="genera_cmd_id()">Genera</button></div>
+      <div><button type="button"  class="btn btn-primary" onclick="genera_cmd_id()">Genera</button></div>
       <div id="info_write_id">
 
       </div>
@@ -70,7 +70,7 @@
     var num = parseInt(hex_str);
     console.log(num)
     console.log("var_cnt: "+ var_cnt);
-    return _obj.name+": "+num+". 0x"+_substr+"\n"; 
+    return "<p><b>"+_obj.name+"</b>: "+num+". 0x"+_substr+"</p>"; 
   }
 
   function variabile_stato_device(_obj, _substr){
@@ -78,14 +78,14 @@
     var num = parseInt(hex_str);
     console.log(num)
     console.log("var_cnt: "+ var_cnt);
-    var ret_str = _obj.name+": "+num+". 0x"+_substr+"\n";
-    ret_str += "____position OK: "+(num & 1)+"\n";
-    ret_str += "____on going program: "+((num>>1) & 1)+"\n";
-    ret_str += "____on going production: "+((num>>2) & 1)+"\n";
-    ret_str += "____barcode detected: "+((num>>3) & 1)+"\n";
-    ret_str += "____dirty barcode: "+((num>>4) & 1)+"\n";
-    ret_str += "____empty battery: "+((num>>5) & 1)+"\n";
-    ret_str += "____to remove: "+((num>>6) & 1)+"\n";
+    var ret_str = "<p><b>"+_obj.name+"</b>: "+num+". 0x"+_substr+"</p>";
+    ret_str += "position OK: "+(num & 1)+"\n";
+    ret_str += "on going program: "+((num>>1) & 1)+"\n";
+    ret_str += "on going production: "+((num>>2) & 1)+"\n";
+    ret_str += "barcode detected: "+((num>>3) & 1)+"\n";
+    ret_str += "dirty barcode: "+((num>>4) & 1)+"\n";
+    ret_str += "empty battery: "+((num>>5) & 1)+"\n";
+    ret_str += "to remove: "+((num>>6) & 1)+"\n";
     return ret_str; 
   }
 
@@ -119,7 +119,7 @@
       i = i + diagn_pkt[var_cnt].len;
       var_cnt++;
     }
-    document.getElementById("info_diagnostica").innerText = (info_box);
+    document.getElementById("info_diagnostica").innerHTML = (info_box);
 
   }
 
