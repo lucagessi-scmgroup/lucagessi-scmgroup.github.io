@@ -14,7 +14,8 @@
 <body>
   <script src="js/scripts.js"></script>
   <div>
-    <h1>Flexdrive decoder - Github Page</h1>
+    <h1>Flexdrive</h1>
+    <h2>Decodificatore e codificatore pacchetti</h2>
   </div>
     <div>
       <h1>Pacchetto diagnostica</h1>
@@ -86,21 +87,21 @@
     { name :"spi locked", len:8, handle:variabile_standard}
   ];
   function decodifica_diagnostica() {
-      console.log("Inizio decodifica");
-      var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
-      console.log(pacchetto);
-      var lun = pacchetto.length;
-      info_box = "";
-      var_cnt = 0;
-      //var lun = 40;
-      for (let i = 0; (var_cnt < diagn_pkt.length) && (i+diagn_pkt[var_cnt].len-1 <= lun);) {
-        substr = pacchetto.substring(i,i+diagn_pkt[var_cnt].len);
-        console.log(substr);
-        info_box += diagn_pkt[var_cnt].handle(diagn_pkt[var_cnt], substr);
-        i = i + diagn_pkt[var_cnt].len;
-        var_cnt++;
-      }
-      document.getElementById("info_diagnostica").innerText = (info_box);
+    console.log("Inizio decodifica");
+    var pacchetto = document.getElementById("pacchetto_diagnostica").value.replace(/\s/g, '');
+    console.log(pacchetto);
+    var lun = pacchetto.length;
+    info_box = "";
+    var_cnt = 0;
+    //var lun = 40;
+    for (let i = 0; (var_cnt < diagn_pkt.length) && (i+diagn_pkt[var_cnt].len-1 <= lun);) {
+      substr = pacchetto.substring(i,i+diagn_pkt[var_cnt].len);
+      console.log(substr);
+      info_box += diagn_pkt[var_cnt].handle(diagn_pkt[var_cnt], substr);
+      i = i + diagn_pkt[var_cnt].len;
+      var_cnt++;
+    }
+    document.getElementById("info_diagnostica").innerText = (info_box);
 
   }
 
@@ -120,21 +121,23 @@
   ];
 
   function decodifica_adv_dev() {
-      console.log("Inizio decodifica adv dev");
-      var pacchetto = document.getElementById("pacchetto_adv_dev").value.replace(/\s/g, '');
-      console.log(pacchetto);
-      var lun = pacchetto.length;
-      info_box = "";
-      var_cnt = 0;
-      //var lun = 40;
-      for (let i = 0; (var_cnt < adv_dev_pkt.length) && (i+adv_dev_pkt[var_cnt].len-1 <= lun);) {
-        substr = pacchetto.substring(i,i+adv_dev_pkt[var_cnt].len);
-        console.log(substr);
-        info_box += adv_dev_pkt[var_cnt].handle(adv_dev_pkt[var_cnt], substr);
-        i = i + adv_dev_pkt[var_cnt].len;
-        var_cnt++;
-      }
-      document.getElementById("info_adv_dev").innerText = (info_box);
+    alert("Non ancora implementato");
+    return;
+    console.log("Inizio decodifica adv dev");
+    var pacchetto = document.getElementById("pacchetto_adv_dev").value.replace(/\s/g, '');
+    console.log(pacchetto);
+    var lun = pacchetto.length;
+    info_box = "";
+    var_cnt = 0;
+    //var lun = 40;
+    for (let i = 0; (var_cnt < adv_dev_pkt.length) && (i+adv_dev_pkt[var_cnt].len-1 <= lun);) {
+      substr = pacchetto.substring(i,i+adv_dev_pkt[var_cnt].len);
+      console.log(substr);
+      info_box += adv_dev_pkt[var_cnt].handle(adv_dev_pkt[var_cnt], substr);
+      i = i + adv_dev_pkt[var_cnt].len;
+      var_cnt++;
+    }
+    document.getElementById("info_adv_dev").innerText = (info_box);
 
   }
 </script>
